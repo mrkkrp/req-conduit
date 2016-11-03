@@ -16,7 +16,6 @@
 module Network.HTTP.Req.Conduit
   ( -- * Request bodies
     ReqBodySource (..)
-  , ReqBodyFile   (..)
     -- * Response interpretations
  )
 where
@@ -29,7 +28,6 @@ import Network.HTTP.Req
 import qualified Data.ByteString              as B
 import qualified Data.Conduit                 as C
 import qualified Network.HTTP.Client          as L
-import qualified Network.HTTP.Client.Internal as LI
 
 ----------------------------------------------------------------------------
 -- Request bodies
@@ -44,17 +42,6 @@ data ReqBodySource = ReqBodySource Int64 (C.Source IO ByteString)
 instance HttpBody ReqBodySource where
   getRequestBody (ReqBodySource size src) =
     L.RequestBodyStream size (srcToPopperIO src)
-
--- | Body option that streams request body from specified file. It is
--- expected that the file size does not change during streaming of the file.
---
--- It does not set the @Content-Type@ header.
-
-newtype ReqBodyFile = ReqBodyFile FilePath
-
-instance HttpBody ReqBodyFile where
-  getRequestBody (ReqBodyFile path) =
-    LI.RequestBodyIO (L.streamFile path)
 
 ----------------------------------------------------------------------------
 -- Response interpretations
