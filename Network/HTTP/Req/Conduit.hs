@@ -45,7 +45,8 @@ instance HttpBody ReqBodySource where
   getRequestBody (ReqBodySource size src) =
     L.RequestBodyStream size (srcToPopperIO src)
 
--- | Body option that streams request body from specified file.
+-- | Body option that streams request body from specified file. It is
+-- expected that the file size does not change during streaming of the file.
 --
 -- It does not set the @Content-Type@ header.
 
