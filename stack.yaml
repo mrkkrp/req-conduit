@@ -1,8 +1,4 @@
-resolver: lts-7.5
+resolver: nightly-2016-11-07
 packages:
 - '.'
-- '/home/mark/projects/programs/haskell/req/'
-extra-deps:
-- http-client-0.5.3.2
-- http-client-tls-0.3.3
-- http-conduit-2.2.3
+- '/home/mark/projects/programs/haskell/req'
