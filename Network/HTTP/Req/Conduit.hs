@@ -105,7 +105,7 @@ req'
   :: ( MonadHttp  m
      , HttpMethod method
      , HttpBody   body
-     , AllowsBody method ~ ProvidesBody body )
+     , HttpBodyAllowed (AllowsBody method) (ProvidesBody body) )
   => method            -- ^ HTTP method
   -> Url scheme        -- ^ 'Url' — location of resource
   -> body              -- ^ Body of the request
