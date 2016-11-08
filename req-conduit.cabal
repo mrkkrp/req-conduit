@@ -62,6 +62,7 @@ library
                     , http-client      >= 0.5   && < 0.6
                     , req              >= 0.1   && < 0.2
                     , resourcet        >= 1.1   && < 1.2
+                    , transformers     >= 0.4   && < 0.6
   exposed-modules:    Network.HTTP.Req.Conduit
   if flag(dev)
     ghc-options:      -Wall -Werror
