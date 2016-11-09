@@ -31,11 +31,50 @@
 -- ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 -- POSSIBILITY OF SUCH DAMAGE.
 
+{-# LANGUAGE DataKinds            #-}
+{-# LANGUAGE FlexibleInstances    #-}
+{-# LANGUAGE OverloadedStrings    #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
+
 module Network.HTTP.Req.ConduitSpec
   ( spec )
 where
 
+import Control.Exception (throwIO)
+import Control.Monad.IO.Class (MonadIO (..))
+import Control.Monad.Trans.Resource (ResourceT)
+import Data.Conduit ((=$=), runConduitRes, ConduitM)
+import Network.HTTP.Req
+import Network.HTTP.Req.Conduit
+import System.IO (Handle)
+import System.IO.Temp
 import Test.Hspec
+import qualified Data.Conduit.Binary as CB
 
 spec :: Spec
-spec = return ()
+spec = do
+
+  describe "streaming 100 Mb of data" $
+    it "works" $ do
+      let tempi :: (Handle -> IO ()) -> IO ()
+          tempi f = withSystemTempFile "req-conduit" (const f)
+      tempi $ \h ->
+        runConduitRes $ do
+          let size :: Int
+              size = 100 * 1024 * 1024
+          req' GET (httpbin /: "stream-bytes" /~ size) NoReqBody
+            httpSource mempty =$= CB.sinkHandle h
+
+----------------------------------------------------------------------------
+-- Instances
+
+instance MonadHttp (ConduitM i o (ResourceT IO)) where
+  handleHttpException = liftIO . throwIO
+
+----------------------------------------------------------------------------
+-- Helpers
+
+-- | 'Url' representing <https://httpbin.org>.
+
+httpbin :: Url 'Https
+httpbin = https "httpbin.org"
