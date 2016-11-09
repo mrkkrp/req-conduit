@@ -41,20 +41,32 @@ module Network.HTTP.Req.ConduitSpec
 where
 
 import Control.Exception (throwIO)
+import Control.Monad
 import Control.Monad.IO.Class (MonadIO (..))
 import Control.Monad.Trans.Resource (ResourceT)
 import Data.Conduit ((=$=), runConduitRes, ConduitM)
+import Data.Int (Int64)
 import Network.HTTP.Req
 import Network.HTTP.Req.Conduit
 import System.IO (Handle)
 import System.IO.Temp
 import Test.Hspec
+import qualified Data.ByteString     as B
 import qualified Data.Conduit.Binary as CB
+import qualified Data.Conduit.List   as CL
 
 spec :: Spec
 spec = do
 
-  describe "streaming 100 Mb of data" $
+  describe "streaming 100 M request" $
+    it "works" $ do
+      let size :: Int64
+          size = 100 * 1024 * 1024
+          src = CL.replicate (100 * 1024) (B.replicate 1024 0)
+      void (req POST (httpbin /: "post")
+        (ReqBodySource size src) ignoreResponse mempty) :: IO ()
+
+  describe "streaming 100 M response" $
     it "works" $ do
       let tempi :: (Handle -> IO ()) -> IO ()
           tempi f = withSystemTempFile "req-conduit" (const f)
@@ -67,6 +79,9 @@ spec = do
 
 ----------------------------------------------------------------------------
 -- Instances
+
+instance MonadHttp IO where
+  handleHttpException = throwIO
 
 instance MonadHttp (ConduitM i o (ResourceT IO)) where
   handleHttpException = liftIO . throwIO
