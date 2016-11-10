@@ -13,8 +13,13 @@
 -- The package re-uses some pieces of code from the @http-conduit@ package,
 -- but not to the extent that depending on that package is reasonable.
 
-{-# LANGUAGE RankNTypes   #-}
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE CPP             #-}
+{-# LANGUAGE RankNTypes      #-}
+{-# LANGUAGE TypeFamilies    #-}
+
+#if __GLASGOW_HASKELL__ <  710
+{-# LANGUAGE ConstraintKinds #-}
+#endif
 
 module Network.HTTP.Req.Conduit
   ( -- * Streaming request bodies
@@ -36,6 +41,10 @@ import Network.HTTP.Req
 import qualified Data.ByteString     as B
 import qualified Data.Conduit        as C
 import qualified Network.HTTP.Client as L
+
+#if !MIN_VERSION_base(4,8,0)
+import Data.Monoid
+#endif
 
 ----------------------------------------------------------------------------
 -- Request bodies
@@ -113,7 +122,7 @@ req'
   -> Option scheme     -- ^ Collection of optional parameters
   -> m a               -- ^ Result
 req' method url body m options = do
-  request <- responseRequest <$> req method url body returnRequest options
+  request <- responseRequest `liftM` req method url body returnRequest options
   withReqManager (m request)
 
 -- | Perform an HTTP request and get the response as a 'C.Producer'.
