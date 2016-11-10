@@ -31,6 +31,7 @@
 -- ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 -- POSSIBILITY OF SUCH DAMAGE.
 
+{-# LANGUAGE CPP                  #-}
 {-# LANGUAGE DataKinds            #-}
 {-# LANGUAGE FlexibleInstances    #-}
 {-# LANGUAGE OverloadedStrings    #-}
@@ -54,6 +55,10 @@ import Test.Hspec
 import qualified Data.ByteString     as B
 import qualified Data.Conduit.Binary as CB
 import qualified Data.Conduit.List   as CL
+
+#if !MIN_VERSION_base(4,8,0)
+import Data.Monoid
+#endif
 
 spec :: Spec
 spec = do

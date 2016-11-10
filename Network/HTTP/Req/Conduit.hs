@@ -42,10 +42,6 @@ import qualified Data.ByteString     as B
 import qualified Data.Conduit        as C
 import qualified Network.HTTP.Client as L
 
-#if !MIN_VERSION_base(4,8,0)
-import Data.Monoid
-#endif
-
 ----------------------------------------------------------------------------
 -- Request bodies
 
