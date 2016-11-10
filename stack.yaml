@@ -1,4 +1,5 @@
 resolver: nightly-2016-11-07
 packages:
 - '.'
-- '/home/mark/projects/programs/haskell/req'
+extra-deps:
+- req-0.1.0
