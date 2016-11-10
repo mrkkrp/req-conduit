@@ -14,6 +14,6 @@ streaming big request bodies in constant space.
 
 ## License
 
-Copyright © 2016 Mark Karpov
+Copyright © 2016 Mark Karpov, Micheal Snoyman
 
 Distributed under BSD 3 clause license.
