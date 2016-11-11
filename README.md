@@ -12,14 +12,6 @@ the [`req`](https://hackage.haskell.org/package/req) package
 with [`conduit`](https://hackage.haskell.org/package/conduit) helpers for
 streaming big request bodies in constant space.
 
-## Potential issues
-
-Streaming of request body does not happen in constant memory. But it does
-not work with `http-conduit` either, see:
-https://github.com/snoyberg/http-client/issues/240. Streaming of response
-body does happen in constant memory as expected. See the benchmarks coming
-with the library for hands-on experiences.
-
 ## Contribution
 
 Issues, bugs, and questions may be reported in [the GitHub issue tracker for
