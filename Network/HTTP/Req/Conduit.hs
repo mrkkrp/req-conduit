@@ -75,7 +75,7 @@ instance HttpBody ReqBodySource where
 --       time the instance won't be necessary.
 --     * Use the 'withReqManager' in combination with 'ReturnRequest'
 --       response interpretation to get both 'L.Manager' and 'L.Request' and
---       then delegate the work to to a custom callback.
+--       then delegate the work to a custom callback.
 --
 -- We go with the second option. Here is an example of how to stream 100000
 -- bytes and save them to a file:
