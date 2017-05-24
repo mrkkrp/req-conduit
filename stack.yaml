@@ -1,5 +1,3 @@
-resolver: nightly-2016-11-07
+resolver: lts-8.15
 packages:
 - '.'
-extra-deps:
-- req-0.1.0
