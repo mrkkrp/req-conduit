@@ -30,11 +30,11 @@ import Data.Monoid
 spec :: Spec
 spec = do
 
-  describe "streaming 100 M request" $
+  describe "streaming 10 M request" $
     it "works" $ do
       let size :: Int64
-          size = 100 * 1024 * 1024
-          src = CL.replicate (100 * 1024) (B.replicate 1024 0)
+          size = 10 * 1024 * 1024
+          src = CL.replicate (10 * 1024) (B.replicate 1024 0)
       void (req POST (httpbin /: "post")
         (ReqBodySource size src) ignoreResponse mempty) :: IO ()
 
