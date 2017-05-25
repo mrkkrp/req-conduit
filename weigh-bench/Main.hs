@@ -21,14 +21,15 @@ import qualified Data.Conduit.List   as CL
 
 main :: IO ()
 main = mainWith $ do
-  io "streaming 5   M request  body" bigRequest  (5   * 1024 * 1024)
-  io "streaming 25  M request  body" bigRequest  (25  * 1024 * 1024)
-  io "streaming 50  M request  body" bigRequest  (50  * 1024 * 1024)
-  io "streaming 100 M request  body" bigRequest  (100 * 1024 * 1024)
-  io "streaming 5   M response body" bigResponse (5   * 1024 * 1024)
-  io "streaming 25  M response body" bigResponse (25  * 1024 * 1024)
-  io "streaming 50  M response body" bigResponse (50  * 1024 * 1024)
-  io "streaming 100 M response body" bigResponse (100 * 1024 * 1024)
+  setColumns [Case, Allocated, GCs, Max]
+  io "streaming 1 M request  body" bigRequest  (1 * 1024 * 1024)
+  io "streaming 2 M request  body" bigRequest  (2 * 1024 * 1024)
+  io "streaming 4 M request  body" bigRequest  (4 * 1024 * 1024)
+  io "streaming 8 M request  body" bigRequest  (8 * 1024 * 1024)
+  io "streaming 1 M response body" bigResponse (1 * 1024 * 1024)
+  io "streaming 2 M response body" bigResponse (2 * 1024 * 1024)
+  io "streaming 4 M response body" bigResponse (4 * 1024 * 1024)
+  io "streaming 8 M response body" bigResponse (8 * 1024 * 1024)
 
 bigRequest :: Int64 -> IO ()
 bigRequest size' = do
