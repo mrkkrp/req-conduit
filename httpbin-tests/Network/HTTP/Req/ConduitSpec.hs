@@ -38,14 +38,14 @@ spec = do
       void (req POST (httpbin /: "post")
         (ReqBodySource size src) ignoreResponse mempty) :: IO ()
 
-  describe "streaming 100 M response" $
+  describe "streaming 10 M response" $
     it "works" $ do
       let tempi :: (Handle -> IO ()) -> IO ()
           tempi f = withSystemTempFile "req-conduit" (const f)
       tempi $ \h ->
         runConduitRes $ do
           let size :: Int
-              size = 100 * 1024 * 1024
+              size = 10 * 1024 * 1024
           req' GET (httpbin /: "stream-bytes" /~ size) NoReqBody
             httpSource mempty =$= CB.sinkHandle h
 
