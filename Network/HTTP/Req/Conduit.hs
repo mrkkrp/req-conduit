@@ -45,7 +45,7 @@ import qualified Network.HTTP.Client as L
 ----------------------------------------------------------------------------
 -- Request bodies
 
--- | This body option streams contents of request body from given
+-- | This body option streams contents of request body from the given
 -- 'C.Source'. The 'Int64' value is size of the data in bytes.
 --
 -- Using of this body option does not set the @Content-Type@ header.
@@ -62,8 +62,8 @@ instance HttpBody ReqBodySource where
 -- $streaming-response
 --
 -- Streaming response is a bit tricky as acquiring and releasing a resource
--- (initiating a connection and then closing it in our case) in context of
--- @conduit@ streaming requires working with
+-- (initiating a connection and then closing it in our case) in the context
+-- of @conduit@ streaming requires working with the
 -- 'Control.Monad.Trans.Resource.ResourceT' monad transformer. This does not
 -- play well with the framework @req@ builds.
 --
@@ -114,7 +114,7 @@ req'
   => method            -- ^ HTTP method
   -> Url scheme        -- ^ 'Url' — location of resource
   -> body              -- ^ Body of the request
-  -> (L.Request -> L.Manager -> m a) -- ^ How to perform actual request
+  -> (L.Request -> L.Manager -> m a) -- ^ How to perform the actual request
   -> Option scheme     -- ^ Collection of optional parameters
   -> m a               -- ^ Result
 req' method url body m options = do
