@@ -47,7 +47,7 @@ spec = do
           let size :: Int
               size = 10 * 1024 * 1024
           req' GET (httpbin /: "stream-bytes" /~ size) NoReqBody
-            httpSource mempty =$= CB.sinkHandle h
+            mempty httpSource =$= CB.sinkHandle h
 
 ----------------------------------------------------------------------------
 -- Instances

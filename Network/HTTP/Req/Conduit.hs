@@ -26,7 +26,6 @@ module Network.HTTP.Req.Conduit
     ReqBodySource (..)
     -- * Streaming response bodies
     -- $streaming-response
-  , req'
   , httpSource )
 where
 
@@ -99,27 +98,8 @@ instance HttpBody ReqBodySource where
 -- > main :: IO ()
 -- > main = runConduitRes $ do
 -- >   let size = 100000 :: Int
--- >   req' GET (https "httpbin.org" /: "bytes" /~ size) NoReqBody httpSource mempty
+-- >   req' GET (https "httpbin.org" /: "bytes" /~ size) NoReqBody mempty httpSource
 -- >     =$= CB.sinkFile "my-favorite-file.bin"
-
--- | Mostly like 'req' with respect to its arguments, but instead of a hint
--- how to interpret response it takes a callback that allows to perform a
--- request using arbitrary code.
-
-req'
-  :: ( MonadHttp  m
-     , HttpMethod method
-     , HttpBody   body
-     , HttpBodyAllowed (AllowsBody method) (ProvidesBody body) )
-  => method            -- ^ HTTP method
-  -> Url scheme        -- ^ 'Url' — location of resource
-  -> body              -- ^ Body of the request
-  -> (L.Request -> L.Manager -> m a) -- ^ How to perform the actual request
-  -> Option scheme     -- ^ Collection of optional parameters
-  -> m a               -- ^ Result
-req' method url body m options = do
-  request <- responseRequest `liftM` req method url body returnRequest options
-  withReqManager (m request)
 
 -- | Perform an HTTP request and get the response as a 'C.Producer'.
 
