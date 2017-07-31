@@ -43,7 +43,7 @@ bigResponse :: Int -> IO ()
 bigResponse size = withSystemTempFile "req-conduit" $ \_ h ->
   runConduitRes $
     req' GET (httpbin /: "stream-bytes" /~ size) NoReqBody
-      httpSource mempty =$= CB.sinkHandle h
+      mempty httpSource =$= CB.sinkHandle h
 
 ----------------------------------------------------------------------------
 -- Instances
