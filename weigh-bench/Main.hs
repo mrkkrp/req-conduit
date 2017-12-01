@@ -9,7 +9,7 @@ import Control.Exception (throwIO)
 import Control.Monad
 import Control.Monad.IO.Class (MonadIO (..))
 import Control.Monad.Trans.Resource (ResourceT)
-import Data.Conduit ((=$=), runConduitRes, ConduitM)
+import Data.Conduit ((.|), runConduitRes, ConduitM)
 import Data.Int (Int64)
 import Network.HTTP.Req
 import Network.HTTP.Req.Conduit
@@ -41,9 +41,9 @@ bigRequest size' = do
 
 bigResponse :: Int -> IO ()
 bigResponse size = withSystemTempFile "req-conduit" $ \_ h ->
-  runConduitRes $
-    req' GET (httpbin /: "stream-bytes" /~ size) NoReqBody
-      mempty httpSource =$= CB.sinkHandle h
+  reqBr GET (httpbin /: "stream-bytes" /~ size) NoReqBody mempty $ \r ->
+    runConduitRes $
+      responseBodySource r .| CB.sinkHandle h
 
 ----------------------------------------------------------------------------
 -- Instances

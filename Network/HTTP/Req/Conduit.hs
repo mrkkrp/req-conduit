@@ -11,11 +11,12 @@
 -- Conduit helpers for streaming big request bodies.
 --
 -- The package re-uses some pieces of code from the @http-conduit@ package,
--- but not to the extent that depending on that package is reasonable.
+-- but not to the extent that depending on that package becomes reasonable.
 
-{-# LANGUAGE CPP             #-}
-{-# LANGUAGE RankNTypes      #-}
-{-# LANGUAGE TypeFamilies    #-}
+{-# LANGUAGE CPP               #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RankNTypes        #-}
+{-# LANGUAGE TypeFamilies      #-}
 
 #if __GLASGOW_HASKELL__ <  710
 {-# LANGUAGE ConstraintKinds #-}
@@ -26,12 +27,11 @@ module Network.HTTP.Req.Conduit
     ReqBodySource (..)
     -- * Streaming response bodies
     -- $streaming-response
-  , httpSource )
+  , responseBodySource )
 where
 
 import Control.Monad
 import Control.Monad.IO.Class (MonadIO (..))
-import Control.Monad.Trans.Resource (MonadResource (..))
 import Data.ByteString (ByteString)
 import Data.Conduit (Source, ($$+), ($$++), await, yield)
 import Data.IORef
@@ -60,24 +60,33 @@ instance HttpBody ReqBodySource where
 
 -- $streaming-response
 --
--- Streaming response is a bit tricky as acquiring and releasing a resource
--- (initiating a connection and then closing it in our case) in the context
--- of @conduit@ streaming requires working with the
--- 'Control.Monad.Trans.Resource.ResourceT' monad transformer. This does not
--- play well with the framework @req@ builds.
+-- The easiest way to stream response of an HTTP request is to use the
+-- 'reqBr' function in conjunction with 'responseBodySource':
 --
--- Essentially there are only two ways to make it work:
+-- > {-# LANGUAGE OverloadedStrings #-}
+-- >
+-- > module Main (main) where
+-- >
+-- > import Data.Conduit ((.|), runConduitRes)
+-- > import Data.Default.Class
+-- > import Network.HTTP.Req
+-- > import Network.HTTP.Req.Conduit
+-- > import qualified Data.Conduit.Binary as CB
+-- >
+-- > main :: IO ()
+-- > main = runReq def $ do
+-- >   let size = 100000 :: Int
+-- >   reqBr GET (https "httpbin.org" /: "bytes" /~ size) NoReqBody mempty $ \r ->
+-- >     runConduitRes $
+-- >       responseBodySource r .| CB.sinkFile "my-file.bin"
 --
---     * Require that every 'MonadHttp' must be an instance of
---       'MonadResource'. This obviously makes the @req@ package harder to
---       work with and less user-friendly. Not to mention that most of the
---       time the instance won't be necessary.
---     * Use the 'withReqManager' in combination with 'ReturnRequest'
---       response interpretation to get both 'L.Manager' and 'L.Request' and
---       then delegate the work to a custom callback.
+-- This solution benefits from the fact that Req still handles all the
+-- details like handling of exceptions and retrying for us. However this
+-- approach is only viable when the entire pipeline can be run in 'IO' monad
+-- (in the function that is the last argument of 'reqBr').
 --
--- We go with the second option. Here is an example of how to stream 100000
--- bytes and save them to a file:
+-- If you need to use a more complex monad, you'll need to deal with the
+-- lower-level function 'req'':
 --
 -- > {-# LANGUAGE FlexibleInstances #-}
 -- > {-# LANGUAGE OverloadedStrings #-}
@@ -87,10 +96,11 @@ instance HttpBody ReqBodySource where
 -- > import Control.Exception (throwIO)
 -- > import Control.Monad.IO.Class (MonadIO (..))
 -- > import Control.Monad.Trans.Resource (ResourceT)
--- > import Data.Conduit ((=$=), runConduitRes, ConduitM)
+-- > import Data.Conduit
 -- > import Network.HTTP.Req
 -- > import Network.HTTP.Req.Conduit
 -- > import qualified Data.Conduit.Binary as CB
+-- > import qualified Network.HTTP.Client as L
 -- >
 -- > instance MonadHttp (ConduitM i o (ResourceT IO)) where
 -- >   handleHttpException = liftIO . throwIO
@@ -98,19 +108,23 @@ instance HttpBody ReqBodySource where
 -- > main :: IO ()
 -- > main = runConduitRes $ do
 -- >   let size = 100000 :: Int
--- >   req' GET (https "httpbin.org" /: "bytes" /~ size) NoReqBody mempty httpSource
--- >     =$= CB.sinkFile "my-favorite-file.bin"
+-- >   req' GET (https "httpbin.org" /: "bytes" /~ size) NoReqBody mempty
+-- >     (\request manager ->
+-- >       bracketP (L.responseOpen request manager) L.responseClose
+-- >         responseBodySource)
+-- >     .| CB.sinkFile "my-file.bin"
+--
+-- 'req'' does not open\/close connections, handle exceptions, and does not
+-- perform retrying though, so you're on your own.
 
--- | Perform an HTTP request and get the response as a 'C.Producer'.
+-- | Turn @'L.Response' 'L.BodyReader'@ into a 'C.Producer'.
+--
+-- @since 1.0.0
 
-httpSource
-  :: MonadResource m
-  => L.Request         -- ^ Pre-formed 'L.Request'
-  -> L.Manager         -- ^ Manger to use
+responseBodySource :: MonadIO m
+  => L.Response L.BodyReader -- ^ Response with body reader
   -> C.Producer m ByteString -- ^ Response body as a 'C.Producer'
-httpSource request manager =
-  C.bracketP (L.responseOpen request manager) L.responseClose
-    (bodyReaderSource . L.responseBody)
+responseBodySource = bodyReaderSource . L.responseBody
 
 ----------------------------------------------------------------------------
 -- Helpers
