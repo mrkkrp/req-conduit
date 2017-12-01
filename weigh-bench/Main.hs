@@ -7,9 +7,7 @@ module Main (main) where
 
 import Control.Exception (throwIO)
 import Control.Monad
-import Control.Monad.IO.Class (MonadIO (..))
-import Control.Monad.Trans.Resource (ResourceT)
-import Data.Conduit ((.|), runConduitRes, ConduitM)
+import Data.Conduit ((.|), runConduitRes)
 import Data.Int (Int64)
 import Network.HTTP.Req
 import Network.HTTP.Req.Conduit
@@ -50,9 +48,6 @@ bigResponse size = withSystemTempFile "req-conduit" $ \_ h ->
 
 instance MonadHttp IO where
   handleHttpException = throwIO
-
-instance MonadHttp (ConduitM i o (ResourceT IO)) where
-  handleHttpException = liftIO . throwIO
 
 ----------------------------------------------------------------------------
 -- Helpers
