@@ -33,23 +33,22 @@ where
 import Control.Monad
 import Control.Monad.IO.Class (MonadIO (..))
 import Data.ByteString (ByteString)
-import Data.Conduit (Source, ($$+), ($$++), await, yield)
+import Data.Conduit (ConduitT, ($$+), ($$++), await, yield)
 import Data.IORef
 import Data.Int (Int64)
 import Network.HTTP.Req
 import qualified Data.ByteString     as B
-import qualified Data.Conduit        as C
 import qualified Network.HTTP.Client as L
 
 ----------------------------------------------------------------------------
 -- Request bodies
 
 -- | This body option streams contents of request body from the given
--- 'C.Source'. The 'Int64' value is size of the data in bytes.
+-- source. The 'Int64' value is size of the data in bytes.
 --
 -- Using of this body option does not set the @Content-Type@ header.
 
-data ReqBodySource = ReqBodySource Int64 (C.Source IO ByteString)
+data ReqBodySource = ReqBodySource Int64 (ConduitT () ByteString IO ())
 
 instance HttpBody ReqBodySource where
   getRequestBody (ReqBodySource size src) =
@@ -117,13 +116,13 @@ instance HttpBody ReqBodySource where
 -- 'req'' does not open\/close connections, handle exceptions, and does not
 -- perform retrying though, so you're on your own.
 
--- | Turn @'L.Response' 'L.BodyReader'@ into a 'C.Producer'.
+-- | Turn @'L.Response' 'L.BodyReader'@ into a producer.
 --
 -- @since 1.0.0
 
 responseBodySource :: MonadIO m
   => L.Response L.BodyReader -- ^ Response with body reader
-  -> C.Producer m ByteString -- ^ Response body as a 'C.Producer'
+  -> ConduitT i ByteString m () -- ^ Response body as a 'C.Producer'
 responseBodySource = bodyReaderSource . L.responseBody
 
 ----------------------------------------------------------------------------
@@ -131,7 +130,7 @@ responseBodySource = bodyReaderSource . L.responseBody
 
 -- | This is taken from "Network.HTTP.Client.Conduit" without modifications.
 
-srcToPopperIO :: Source IO ByteString -> L.GivesPopper ()
+srcToPopperIO :: ConduitT () ByteString IO () -> L.GivesPopper ()
 srcToPopperIO src f = do
   (rsrc0, ()) <- src $$+ return ()
   irsrc <- newIORef rsrc0
@@ -149,7 +148,7 @@ srcToPopperIO src f = do
 
 -- | This is taken from "Network.HTTP.Client.Conduit" without modifications.
 
-bodyReaderSource :: MonadIO m => L.BodyReader -> C.Producer m ByteString
+bodyReaderSource :: MonadIO m => L.BodyReader -> ConduitT i ByteString m ()
 bodyReaderSource br = go
   where
     go = do
