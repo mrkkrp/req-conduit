@@ -58,7 +58,7 @@ test-suite httpbin-tests
                     , req              >= 1.0   && < 2.0
                     , req-conduit
                     , resourcet        >= 1.1   && < 1.3
-                    , temporary        >= 1.1   && < 1.3
+                    , temporary        >= 1.1   && < 1.4
                     , transformers     >= 0.4   && < 0.6
   build-tools:        hspec-discover   >= 2.0   && < 3.0
   if flag(dev)
@@ -78,7 +78,7 @@ benchmark weigh-bench
                     , req              >= 1.0   && < 2.0
                     , req-conduit
                     , resourcet        >= 1.1   && < 1.3
-                    , temporary        >= 1.1   && < 1.3
+                    , temporary        >= 1.1   && < 1.4
                     , weigh            >= 0.0.4
   if flag(dev)
     ghc-options:      -O2 -Wall -Werror
