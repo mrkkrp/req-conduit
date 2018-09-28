@@ -13,15 +13,6 @@
 -- The package re-uses some pieces of code from the @http-conduit@ package,
 -- but not to the extent that depending on that package becomes reasonable.
 
-{-# LANGUAGE CPP               #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RankNTypes        #-}
-{-# LANGUAGE TypeFamilies      #-}
-
-#if __GLASGOW_HASKELL__ <  710
-{-# LANGUAGE ConstraintKinds #-}
-#endif
-
 module Network.HTTP.Req.Conduit
   ( -- * Streaming request bodies
     ReqBodySource (..)
