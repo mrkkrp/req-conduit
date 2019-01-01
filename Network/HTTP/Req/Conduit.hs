@@ -1,6 +1,6 @@
 -- |
 -- Module      :  Network.HTTP.Req.Conduit
--- Copyright   :  © 2016–2018 Mark Karpov, Michael Snoyman
+-- Copyright   :  © 2016–2019 Mark Karpov, Michael Snoyman
 -- License     :  BSD 3 clause
 --
 -- Maintainer  :  Mark Karpov <markkarpov92@gmail.com>
