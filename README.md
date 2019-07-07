@@ -20,6 +20,6 @@ Pull requests are also welcome and will be reviewed quickly.
 
 ## License
 
-Copyright © 2016–2019 Mark Karpov, Michael Snoyman
+Copyright © 2016–present Mark Karpov, Michael Snoyman
 
 Distributed under BSD 3 clause license.
