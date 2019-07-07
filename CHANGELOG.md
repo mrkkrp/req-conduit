@@ -1,3 +1,7 @@
+## Unreleased
+
+* Dropped support for GHC 8.0 and older.
+
 ## Req Conduit 1.0.0
 
 * This version is to be used with Req 1.0.0 and later.
