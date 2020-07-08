@@ -4,7 +4,7 @@
 [![Hackage](https://img.shields.io/hackage/v/req-conduit.svg?style=flat)](https://hackage.haskell.org/package/req-conduit)
 [![Stackage Nightly](http://stackage.org/package/req-conduit/badge/nightly)](http://stackage.org/nightly/package/req-conduit)
 [![Stackage LTS](http://stackage.org/package/req-conduit/badge/lts)](http://stackage.org/lts/package/req-conduit)
-[![Build Status](https://travis-ci.org/mrkkrp/req-conduit.svg?branch=master)](https://travis-ci.org/mrkkrp/req-conduit)
+![CI](https://github.com/mrkkrp/req-conduit/workflows/CI/badge.svg?branch=master)
 
 This library extends functionality of the
 [`req`](https://hackage.haskell.org/package/req) package with
