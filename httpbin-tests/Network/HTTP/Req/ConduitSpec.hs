@@ -8,7 +8,7 @@ module Network.HTTP.Req.ConduitSpec (spec) where
 import Control.Exception (throwIO)
 import Control.Monad
 import qualified Data.ByteString as B
-import Data.Conduit ((.|), runConduitRes)
+import Data.Conduit (runConduitRes, (.|))
 import qualified Data.Conduit.Binary as CB
 import qualified Data.Conduit.List as CL
 import Data.Int (Int64)
@@ -20,9 +20,8 @@ import Test.Hspec
 
 spec :: Spec
 spec = do
-  describe "streaming 10 M request"
-    $ it "works"
-    $ do
+  describe "streaming 10 M request" $
+    it "works" $ do
       let size :: Int64
           size = 10 * 1024 * 1024
           src = CL.replicate (10 * 1024) (B.replicate 1024 0)
@@ -36,9 +35,8 @@ spec = do
         ) ::
         IO ()
 
-  describe "streaming 10 M response"
-    $ it "works"
-    $ do
+  describe "streaming 10 M response" $
+    it "works" $ do
       let tempi :: (Handle -> IO ()) -> IO ()
           tempi f = withSystemTempFile "req-conduit" (const f)
       tempi $ \h -> do

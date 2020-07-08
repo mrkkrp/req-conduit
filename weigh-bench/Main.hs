@@ -8,7 +8,7 @@ module Main (main) where
 import Control.Exception (throwIO)
 import Control.Monad
 import qualified Data.ByteString as B
-import Data.Conduit ((.|), runConduitRes)
+import Data.Conduit (runConduitRes, (.|))
 import qualified Data.Conduit.Binary as CB
 import qualified Data.Conduit.List as CL
 import Data.Int (Int64)
