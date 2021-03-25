@@ -75,8 +75,8 @@ instance HttpBody ReqBodySource where
 -- approach is only viable when the entire pipeline can be run in 'IO' monad
 -- (in the function that is the last argument of 'reqBr').
 --
--- If you need to use a more complex monad, you'll need to deal with the
--- lower-level function 'req'':
+-- If you need to use a more complex monad, use the lower-level function
+-- 'req'':
 --
 -- > {-# LANGUAGE FlexibleInstances #-}
 -- > {-# LANGUAGE OverloadedStrings #-}
