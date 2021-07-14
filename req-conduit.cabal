@@ -7,7 +7,7 @@ maintainer:      Mark Karpov <markkarpov92@gmail.com>
 author:
     Mark Karpov <markkarpov92@gmail.com>, Michael Snoyman <michael@snoyman.com>
 
-tested-with:     ghc ==8.8.4 ghc ==8.10.4 ghc ==9.0.1
+tested-with:     ghc ==8.8.4 ghc ==8.10.5 ghc ==9.0.1
 homepage:        https://github.com/mrkkrp/req-conduit
 bug-reports:     https://github.com/mrkkrp/req-conduit/issues
 synopsis:        Conduit helpers for the req HTTP client library
