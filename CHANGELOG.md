@@ -1,6 +1,8 @@
-## Unreleased
+## Req Conduit 1.0.1
 
-* Dropped support for GHC 8.2 and older.
+* Builds with GHC 8.8, 8.10, 9.0 and the newest nightly Stackage snapshots.
+
+* Dropped support for GHC 8.6 and older.
 
 ## Req Conduit 1.0.0
 
