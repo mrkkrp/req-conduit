@@ -1,13 +1,13 @@
-cabal-version:   1.18
+cabal-version:   2.4
 name:            req-conduit
 version:         1.0.1
-license:         BSD3
+license:         BSD-3-Clause
 license-file:    LICENSE.md
 maintainer:      Mark Karpov <markkarpov92@gmail.com>
 author:
     Mark Karpov <markkarpov92@gmail.com>, Michael Snoyman <michael@snoyman.com>
 
-tested-with:     ghc ==8.8.4 ghc ==8.10.5 ghc ==9.0.1
+tested-with:     ghc ==8.8.4 ghc ==8.10.7 ghc ==9.0.2
 homepage:        https://github.com/mrkkrp/req-conduit
 bug-reports:     https://github.com/mrkkrp/req-conduit/issues
 synopsis:        Conduit helpers for the req HTTP client library
@@ -51,12 +51,12 @@ library
             -Wnoncanonical-monad-instances
 
 test-suite httpbin-tests
-    type:             exitcode-stdio-1.0
-    main-is:          Spec.hs
-    build-tools:      hspec-discover >=2.0 && <3.0
-    hs-source-dirs:   httpbin-tests
-    other-modules:    Network.HTTP.Req.ConduitSpec
-    default-language: Haskell2010
+    type:               exitcode-stdio-1.0
+    main-is:            Spec.hs
+    build-tool-depends: hspec-discover:hspec-discover >=2.0 && <3.0
+    hs-source-dirs:     httpbin-tests
+    other-modules:      Network.HTTP.Req.ConduitSpec
+    default-language:   Haskell2010
     build-depends:
         base >=4.13 && <5.0,
         bytestring >=0.2 && <0.12,
