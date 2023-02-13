@@ -111,7 +111,7 @@ instance HttpBody ReqBodySource where
 --
 -- @since 1.0.0
 responseBodySource ::
-  MonadIO m =>
+  (MonadIO m) =>
   -- | Response with body reader
   L.Response L.BodyReader ->
   -- | Response body as a 'C.Producer'
@@ -139,7 +139,7 @@ srcToPopperIO src f = do
   f popper
 
 -- | This is taken from "Network.HTTP.Client.Conduit" without modifications.
-bodyReaderSource :: MonadIO m => L.BodyReader -> ConduitT i ByteString m ()
+bodyReaderSource :: (MonadIO m) => L.BodyReader -> ConduitT i ByteString m ()
 bodyReaderSource br = go
   where
     go = do
