@@ -25,11 +25,11 @@ where
 import Control.Monad
 import Control.Monad.IO.Class (MonadIO (..))
 import Data.ByteString (ByteString)
-import qualified Data.ByteString as B
+import Data.ByteString qualified as B
 import Data.Conduit (ConduitT, await, yield, ($$+), ($$++))
 import Data.IORef
 import Data.Int (Int64)
-import qualified Network.HTTP.Client as L
+import Network.HTTP.Client qualified as L
 import Network.HTTP.Req
 
 ----------------------------------------------------------------------------
