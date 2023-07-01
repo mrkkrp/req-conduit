@@ -7,10 +7,10 @@ module Main (main) where
 
 import Control.Exception (throwIO)
 import Control.Monad
-import qualified Data.ByteString as B
+import Data.ByteString qualified as B
 import Data.Conduit (runConduitRes, (.|))
-import qualified Data.Conduit.Binary as CB
-import qualified Data.Conduit.List as CL
+import Data.Conduit.Binary qualified as CB
+import Data.Conduit.List qualified as CL
 import Data.Int (Int64)
 import Network.HTTP.Req
 import Network.HTTP.Req.Conduit
