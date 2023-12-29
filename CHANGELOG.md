@@ -1,3 +1,8 @@
+## Req Conduit 1.0.2
+
+* Maintenance release with support for GHC 9.8 and more minimal
+  dependencies.
+
 ## Req Conduit 1.0.1
 
 * Builds with GHC 8.8, 8.10, 9.0 and the newest nightly Stackage snapshots.
