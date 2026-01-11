@@ -68,7 +68,7 @@ test-suite httpbin-tests
             -Wunused-packages
 
     else
-        ghc-options: -O2 -Wall
+        buildable: False
 
 benchmark weigh-bench
     type:             exitcode-stdio-1.0

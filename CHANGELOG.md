@@ -1,3 +1,9 @@
+## Unreleased
+
+* Disable the problematic `httpbin-tests` test suite by default. Only enable
+  it when the `dev` flag is enabled. In that case it is expected that an
+  httpbin server is run locally at `localhost:1234`.
+
 ## Req Conduit 1.0.2
 
 * Maintenance release with support for GHC 9.8 and more minimal
