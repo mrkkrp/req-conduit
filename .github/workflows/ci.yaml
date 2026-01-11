@@ -39,6 +39,10 @@ jobs:
             ${{ runner.os }}-${{ matrix.ghc }}-
       - run: cabal format && git diff --exit-code --color=always
       - run: cabal build
+      - run: |
+          docker pull kennethreitz/httpbin
+          docker run -p 1234:80 kennethreitz/httpbin &
+          cabal test
       - run: cabal test
       - run: cabal haddock
       - run: cabal sdist

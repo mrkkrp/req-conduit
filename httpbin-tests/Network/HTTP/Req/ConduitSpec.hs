@@ -31,7 +31,7 @@ spec = do
             (httpbin /: "post")
             (ReqBodySource size src)
             ignoreResponse
-            mempty
+            targetPort
         ) ::
         IO ()
 
@@ -42,7 +42,7 @@ spec = do
       tempi $ \h -> do
         let size :: Int
             size = 10 * 1024 * 1024
-        reqBr GET (httpbin /: "stream-bytes" /~ size) NoReqBody mempty $ \r ->
+        reqBr GET (httpbin /: "stream-bytes" /~ size) NoReqBody targetPort $ \r ->
           runConduitRes $
             responseBodySource r .| CB.sinkHandle h
 
@@ -55,6 +55,8 @@ instance MonadHttp IO where
 ----------------------------------------------------------------------------
 -- Helpers
 
--- | 'Url' representing <https://httpbin.org>.
-httpbin :: Url 'Https
-httpbin = https "httpbin.org"
+httpbin :: Url 'Http
+httpbin = http "localhost"
+
+targetPort :: Option scheme
+targetPort = port 1234
