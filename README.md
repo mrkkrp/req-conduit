@@ -6,7 +6,7 @@
 [![Stackage LTS](http://stackage.org/package/req-conduit/badge/lts)](http://stackage.org/lts/package/req-conduit)
 [![CI](https://github.com/mrkkrp/req-conduit/actions/workflows/ci.yaml/badge.svg)](https://github.com/mrkkrp/req-conduit/actions/workflows/ci.yaml)
 
-This library extends functionality of the
+This library extends the functionality of the
 [`req`](https://hackage.haskell.org/package/req) package with
 [`conduit`](https://hackage.haskell.org/package/conduit) helpers for
 streaming big request bodies in constant space.
@@ -22,4 +22,4 @@ Pull requests are also welcome.
 
 Copyright © 2016–present Mark Karpov, Michael Snoyman
 
-Distributed under BSD 3 clause license.
+Distributed under the BSD 3-clause license.

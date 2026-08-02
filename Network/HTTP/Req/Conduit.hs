@@ -7,7 +7,7 @@
 -- Stability   :  experimental
 -- Portability :  portable
 --
--- The module extends functionality available in "Network.HTTP.Req" with
+-- The module extends the functionality available in "Network.HTTP.Req" with
 -- Conduit helpers for streaming big request bodies.
 --
 -- The package re-uses some pieces of code from the @http-conduit@ package,
@@ -35,10 +35,10 @@ import Network.HTTP.Req
 ----------------------------------------------------------------------------
 -- Request bodies
 
--- | This body option streams contents of request body from the given
--- source. The 'Int64' value is size of the data in bytes.
+-- | This body option streams the contents of the request body from the
+-- given source. The 'Int64' value is the size of the data in bytes.
 --
--- Using of this body option does not set the @Content-Type@ header.
+-- Using this body option does not set the @Content-Type@ header.
 data ReqBodySource = ReqBodySource Int64 (ConduitT () ByteString IO ())
 
 instance HttpBody ReqBodySource where
@@ -50,7 +50,7 @@ instance HttpBody ReqBodySource where
 
 -- $streaming-response
 --
--- The easiest way to stream response of an HTTP request is to use the
+-- The easiest way to stream the response of an HTTP request is to use the
 -- 'reqBr' function in conjunction with 'responseBodySource':
 --
 -- > {-# LANGUAGE OverloadedStrings #-}
@@ -72,8 +72,8 @@ instance HttpBody ReqBodySource where
 --
 -- This solution benefits from the fact that Req still handles all the
 -- details like handling of exceptions and retrying for us. However this
--- approach is only viable when the entire pipeline can be run in 'IO' monad
--- (in the function that is the last argument of 'reqBr').
+-- approach is only viable when the entire pipeline can be run in the 'IO'
+-- monad (in the function that is the last argument of 'reqBr').
 --
 -- If you need to use a more complex monad, use the lower-level function
 -- 'req'':
